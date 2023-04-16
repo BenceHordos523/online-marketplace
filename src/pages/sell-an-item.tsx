@@ -1,17 +1,31 @@
+/* eslint-disable @typescript-eslint/no-floating-promises */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import { type NextPage } from "next";
 import Head from "next/head";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useRouter } from "next/router";
+import { useForm } from "react-hook-form";
+import { api } from "~/utils/api";
 
 type SellItemForm = {
   name: string;
   description: string;
-  price: number;
+  price: string;
 };
 
 const SellAnItem: NextPage = () => {
+  const createListing = api.listings.create.useMutation();
+  const router = useRouter();
   const { register, handleSubmit } = useForm<SellItemForm>();
-  const onSubmit = (formData: SellItemForm) => console.log(formData);
+  const onSubmit = (formData: SellItemForm) => {
+    createListing
+      .mutateAsync({
+        ...formData,
+        price: parseFloat(formData.price),
+      })
+      .then(() => {
+        router.push("/");
+      });
+  };
 
   return (
     <>
@@ -47,7 +61,7 @@ const SellAnItem: NextPage = () => {
               >
                 Description
               </label>
-              <input
+              <textarea
                 id="description"
                 className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
                 {...register("description", { required: true })}

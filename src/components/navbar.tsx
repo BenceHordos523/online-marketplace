@@ -5,7 +5,7 @@ export function Navbar() {
   const user = useUser();
 
   return (
-    <nav className="border-b border-gray-200 border-gray-200 bg-white dark:bg-gray-900">
+    <nav className="border-b border-gray-200  bg-white dark:bg-gray-900">
       <div className="mx-auto flex max-w-screen-xl flex-wrap items-center justify-between p-4">
         <a href="https://flowbite.com/" className="flex items-center">
           <img
@@ -50,15 +50,17 @@ export function Navbar() {
                 Home
               </Link>
             </li>
-            <li>
-              <Link
-                href="/sell-an-item"
-                className="block rounded bg-blue-700 py-2 pl-3 pr-4 text-white dark:text-white md:bg-transparent md:p-0 md:text-blue-700 md:dark:text-blue-500"
-                aria-current="page"
-              >
-                Sell
-              </Link>
-            </li>
+            {user.isSignedIn && (
+              <li>
+                <Link
+                  href="/sell-an-item"
+                  className="block rounded bg-blue-700 py-2 pl-3 pr-4 text-white dark:text-white md:bg-transparent md:p-0 md:text-blue-700 md:dark:text-blue-500"
+                  aria-current="page"
+                >
+                  Sell
+                </Link>
+              </li>
+            )}
             {!user.isSignedIn && (
               <li>
                 <SignInButton>
